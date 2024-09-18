@@ -1,59 +1,28 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const progressData = [
-    { percentage: 20 },
-    { percentage: 50 },
-    { percentage: 98 },
-  ];
+document.addEventListener("DOMContentLoaded", () => {
+	const progressBar = [
+		document.getElementById("progress-bar-1"),
+		document.getElementById("progress-bar-2"),
+		document.getElementById("progress-bar-3"),
+	];
 
-  const progressContainer = document.getElementById("progressContainer");
-  const progressBars = [];
+	const targetValues = [85, 90, 95];
 
-  function createProgressBar(index) {
-    const progressBar = document.createElement("div");
-    progressBar.className = "progress-bar";
-    progressBar.id = "progressBar" + index;
-    progressContainer.appendChild(progressBar);
+	const progressText = [
+		document.getElementById("percentage-1"),
+		document.getElementById("percentage-2"),
+		document.getElementById("percentage-3"),
+	];
 
-    const progressText = document.createElement("div");
-    progressText.className = "progress-text";
-    progressText.id = "progressText" + index;
-    progressContainer.appendChild(progressText);
+	progressBar.forEach((bar, index) => {
+		const targetValue = targetValues[index];
+		let currentValue = 0;
 
-    progressBars.push({
-      bar: progressBar,
-      text: progressText,
-      currentStep: 0,
-      totalSteps: 100,
-      targetPercentage: progressData[index].percentage,
-    });
-  }
-
-  function updateProgress(barIndex, percentage) {
-    const progressBar = progressBars[barIndex].bar;
-    const progressText = progressBars[barIndex].text;
-
-    progressBar.style.width = percentage + "%";
-    progressText.innerText = percentage + "%";
-  }
-
-  function simulateProgress(barIndex) {
-    const currentStep = progressBars[barIndex].currentStep;
-    const totalSteps = progressBars[barIndex].totalSteps;
-    const targetPercentage = progressBars[barIndex].targetPercentage;
-
-    if (currentStep < totalSteps && currentStep < targetPercentage) {
-      const percentage = (currentStep / totalSteps) * 100;
-      updateProgress(barIndex, percentage);
-
-      setTimeout(() => {
-        progressBars[barIndex].currentStep++;
-        simulateProgress(barIndex);
-      }, 50);
-    }
-  }
-
-  for (let i = 0; i < progressData.length; i++) {
-    createProgressBar(i);
-    simulateProgress(i);
-  }
+		setInterval(() => {
+			if (currentValue < targetValue) {
+				currentValue++;
+				bar.style.width = currentValue + "%";
+				progressText[index].textContent = currentValue + "%";
+			}
+		}, 10);
+	});
 });
